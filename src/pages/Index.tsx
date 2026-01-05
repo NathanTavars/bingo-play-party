@@ -1,5 +1,6 @@
 import Header from "@/components/Header";
-import HeroSection from "@/components/HeroSection";
+import HeroCarousel from "@/components/HeroCarousel";
+import HowToPlaySection from "@/components/HowToPlaySection";
 import LiveGamesSection from "@/components/LiveGamesSection";
 import BingoCardsSection from "@/components/BingoCardsSection";
 import PrizesSection from "@/components/PrizesSection";
@@ -10,7 +11,8 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <Header />
       <main>
-        <HeroSection />
+        <HeroCarousel />
+        <HowToPlaySection />
         <LiveGamesSection />
         <BingoCardsSection />
         <PrizesSection />
