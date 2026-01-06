@@ -7,6 +7,15 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Auth from "./pages/Auth";
 import BingoGame from "./pages/BingoGame";
+import AdminLayout from "./pages/admin/AdminLayout";
+import Dashboard from "./pages/admin/Dashboard";
+import Clients from "./pages/admin/Clients";
+import Reports from "./pages/admin/Reports";
+import Transactions from "./pages/admin/Transactions";
+import AdminUsers from "./pages/admin/AdminUsers";
+import Gateways from "./pages/admin/Gateways";
+import Settings from "./pages/admin/Settings";
+import Rounds from "./pages/admin/Rounds";
 
 const queryClient = new QueryClient();
 
@@ -20,6 +29,19 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/jogo" element={<BingoGame />} />
+          
+          {/* Admin Routes */}
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route index element={<Dashboard />} />
+            <Route path="clientes" element={<Clients />} />
+            <Route path="relatorios" element={<Reports />} />
+            <Route path="transacoes" element={<Transactions />} />
+            <Route path="usuarios" element={<AdminUsers />} />
+            <Route path="gateways" element={<Gateways />} />
+            <Route path="configuracoes" element={<Settings />} />
+            <Route path="rodadas" element={<Rounds />} />
+          </Route>
+          
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

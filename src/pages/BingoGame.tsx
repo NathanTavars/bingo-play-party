@@ -172,11 +172,11 @@ const BingoGame = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-hero">
+    <div className="h-screen overflow-hidden bg-gradient-hero flex flex-col">
       {/* Header */}
-      <header className="fixed top-0 left-0 right-0 z-50 glass">
+      <header className="shrink-0 glass z-50">
         <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between h-16">
+          <div className="flex items-center justify-between h-14">
             <Link to="/" className="flex items-center gap-2 text-foreground hover:text-primary transition-colors">
               <ArrowLeft className="w-5 h-5" />
               <span className="font-medium">Voltar</span>
@@ -198,42 +198,42 @@ const BingoGame = () => {
         </div>
       </header>
 
-      <main className="container mx-auto px-4 pt-24 pb-8">
+      <main className="flex-1 overflow-hidden container mx-auto px-4 py-3 flex flex-col">
         {/* Game Info Bar */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          <Card className="glass p-4 text-center">
-            <Trophy className="w-6 h-6 text-primary mx-auto mb-2" />
-            <div className="text-sm text-muted-foreground">Prêmio</div>
-            <div className="font-display text-xl font-bold text-primary">{prize}</div>
+        <div className="shrink-0 grid grid-cols-4 gap-2 mb-3">
+          <Card className="glass p-2 text-center">
+            <Trophy className="w-5 h-5 text-primary mx-auto mb-1" />
+            <div className="text-xs text-muted-foreground">Prêmio</div>
+            <div className="font-display text-base font-bold text-primary">{prize}</div>
           </Card>
-          <Card className="glass p-4 text-center">
-            <Users className="w-6 h-6 text-bingo-purple mx-auto mb-2" />
-            <div className="text-sm text-muted-foreground">Jogadores</div>
-            <div className="font-display text-xl font-bold">{players}</div>
+          <Card className="glass p-2 text-center">
+            <Users className="w-5 h-5 text-bingo-purple mx-auto mb-1" />
+            <div className="text-xs text-muted-foreground">Jogadores</div>
+            <div className="font-display text-base font-bold">{players}</div>
           </Card>
-          <Card className="glass p-4 text-center">
-            <Clock className="w-6 h-6 text-bingo-blue mx-auto mb-2" />
-            <div className="text-sm text-muted-foreground">Tempo</div>
-            <div className="font-display text-xl font-bold">{formatTime(timeLeft)}</div>
+          <Card className="glass p-2 text-center">
+            <Clock className="w-5 h-5 text-bingo-blue mx-auto mb-1" />
+            <div className="text-xs text-muted-foreground">Tempo</div>
+            <div className="font-display text-base font-bold">{formatTime(timeLeft)}</div>
           </Card>
-          <Card className="glass p-4 text-center">
-            <Zap className="w-6 h-6 text-bingo-green mx-auto mb-2" />
-            <div className="text-sm text-muted-foreground">Números</div>
-            <div className="font-display text-xl font-bold">{drawnNumbers.length}/75</div>
+          <Card className="glass p-2 text-center">
+            <Zap className="w-5 h-5 text-bingo-green mx-auto mb-1" />
+            <div className="text-xs text-muted-foreground">Números</div>
+            <div className="font-display text-base font-bold">{drawnNumbers.length}/75</div>
           </Card>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-8">
+        <div className="flex-1 overflow-hidden grid lg:grid-cols-2 gap-4">
           {/* Bingo Card */}
-          <div>
-            <h2 className="font-display text-2xl font-bold mb-4 text-center">Sua Cartela</h2>
-            <Card className="glass p-4 md:p-6">
+          <div className="flex flex-col overflow-hidden">
+            <h2 className="shrink-0 font-display text-lg font-bold mb-2 text-center">Sua Cartela</h2>
+            <Card className="flex-1 glass p-3 flex flex-col overflow-hidden">
               {/* Header Row */}
-              <div className="grid grid-cols-5 gap-2 mb-2">
+              <div className="shrink-0 grid grid-cols-5 gap-1.5 mb-1.5">
                 {letters.map((letter, i) => (
                   <div
                     key={letter}
-                    className={`${letterColors[i]} rounded-lg py-2 text-center font-display text-2xl font-bold text-white`}
+                    className={`${letterColors[i]} rounded-lg py-1.5 text-center font-display text-lg font-bold text-white`}
                   >
                     {letter}
                   </div>
@@ -241,7 +241,7 @@ const BingoGame = () => {
               </div>
 
               {/* Number Grid */}
-              <div className="grid grid-cols-5 gap-2">
+              <div className="flex-1 grid grid-cols-5 gap-1.5">
                 {[0, 1, 2, 3, 4].map((row) =>
                   [0, 1, 2, 3, 4].map((col) => {
                     const cellKey = `${col}-${row}`;
@@ -255,7 +255,7 @@ const BingoGame = () => {
                         key={cellKey}
                         className={`
                           aspect-square rounded-lg flex items-center justify-center
-                          font-display text-xl md:text-2xl font-bold
+                          font-display text-lg font-bold
                           transition-all duration-300 cursor-pointer
                           ${isFreeSpace 
                             ? "bg-primary text-primary-foreground" 
@@ -275,18 +275,18 @@ const BingoGame = () => {
               </div>
 
               {/* Bingo Button */}
-              <div className="mt-6">
+              <div className="shrink-0 mt-3">
                 {gameStatus === "bingo" ? (
-                  <Button variant="hero" size="xl" className="w-full animate-pulse-glow">
-                    <Trophy className="w-6 h-6 mr-2" />
+                  <Button variant="hero" size="lg" className="w-full animate-pulse-glow">
+                    <Trophy className="w-5 h-5 mr-2" />
                     🎉 BINGO! VOCÊ GANHOU! 🎉
                   </Button>
                 ) : gameStatus === "waiting" ? (
-                  <Button variant="hero" size="xl" className="w-full" onClick={startGame}>
+                  <Button variant="hero" size="lg" className="w-full" onClick={startGame}>
                     Iniciar Jogo Demo
                   </Button>
                 ) : (
-                  <Button variant="outline" size="xl" className="w-full" disabled>
+                  <Button variant="outline" size="lg" className="w-full" disabled>
                     Aguardando números...
                   </Button>
                 )}
@@ -295,20 +295,20 @@ const BingoGame = () => {
           </div>
 
           {/* Drawn Numbers */}
-          <div>
-            <h2 className="font-display text-2xl font-bold mb-4 text-center">Números Sorteados</h2>
+          <div className="flex flex-col overflow-hidden">
+            <h2 className="shrink-0 font-display text-lg font-bold mb-2 text-center">Números Sorteados</h2>
             
             {/* Current Number Display */}
             {currentNumber && (
-              <div className="mb-6 text-center">
+              <div className="shrink-0 mb-3 text-center">
                 <div className="inline-block">
-                  <div className="text-sm text-muted-foreground mb-2">Número atual</div>
-                  <div className="w-24 h-24 rounded-full bg-gradient-gold flex items-center justify-center shadow-gold animate-pulse-glow mx-auto">
+                  <div className="text-xs text-muted-foreground mb-1">Número atual</div>
+                  <div className="w-16 h-16 rounded-full bg-gradient-gold flex items-center justify-center shadow-gold animate-pulse-glow mx-auto">
                     <div className="text-center">
-                      <div className="text-sm font-bold text-primary-foreground">
+                      <div className="text-xs font-bold text-primary-foreground">
                         {getNumberLetter(currentNumber)}
                       </div>
-                      <div className="font-display text-3xl font-bold text-primary-foreground">
+                      <div className="font-display text-xl font-bold text-primary-foreground">
                         {currentNumber}
                       </div>
                     </div>
@@ -318,36 +318,38 @@ const BingoGame = () => {
             )}
 
             {/* Number History */}
-            <Card className="glass p-4 max-h-96 overflow-y-auto">
-              <div className="grid grid-cols-5 gap-2">
-                {drawnNumbers.slice().reverse().map((num, idx) => (
-                  <div
-                    key={`${num}-${idx}`}
-                    className={`
-                      aspect-square rounded-full flex items-center justify-center
-                      font-display text-sm font-bold
-                      ${idx === 0 ? "bg-primary text-primary-foreground" : "bg-muted"}
-                    `}
-                  >
-                    {num}
-                  </div>
-                ))}
+            <Card className="flex-1 glass p-3 overflow-hidden flex flex-col">
+              <div className="flex-1 overflow-y-auto">
+                <div className="grid grid-cols-8 gap-1.5">
+                  {drawnNumbers.slice().reverse().map((num, idx) => (
+                    <div
+                      key={`${num}-${idx}`}
+                      className={`
+                        aspect-square rounded-full flex items-center justify-center
+                        font-display text-xs font-bold
+                        ${idx === 0 ? "bg-primary text-primary-foreground" : "bg-muted"}
+                      `}
+                    >
+                      {num}
+                    </div>
+                  ))}
+                </div>
+                {drawnNumbers.length === 0 && (
+                  <p className="text-center text-muted-foreground py-4 text-sm">
+                    Aguardando início do jogo...
+                  </p>
+                )}
               </div>
-              {drawnNumbers.length === 0 && (
-                <p className="text-center text-muted-foreground py-8">
-                  Aguardando início do jogo...
-                </p>
-              )}
             </Card>
 
             {/* Number Board Reference */}
-            <div className="mt-6">
-              <h3 className="font-display text-lg font-bold mb-3">Tabela de Referência</h3>
-              <Card className="glass p-4">
-                <div className="grid grid-cols-5 gap-1 text-xs">
+            <div className="shrink-0 mt-3">
+              <h3 className="font-display text-sm font-bold mb-2">Tabela de Referência</h3>
+              <Card className="glass p-2">
+                <div className="grid grid-cols-5 gap-0.5 text-[10px]">
                   {letters.map((letter, colIdx) => (
                     <div key={letter}>
-                      <div className={`${letterColors[colIdx]} rounded text-center py-1 text-white font-bold mb-1`}>
+                      <div className={`${letterColors[colIdx]} rounded text-center py-0.5 text-white font-bold mb-0.5`}>
                         {letter}
                       </div>
                       {Array.from({ length: 15 }, (_, i) => {
@@ -357,8 +359,8 @@ const BingoGame = () => {
                           <div
                             key={num}
                             className={`
-                              text-center py-0.5 rounded mb-0.5
-                              ${isDrawn ? "bg-primary/30 text-primary" : "text-muted-foreground"}
+                              text-center py-0.5 rounded
+                              ${isDrawn ? "bg-primary/30 text-primary font-semibold" : "text-muted-foreground"}
                             `}
                           >
                             {num}
