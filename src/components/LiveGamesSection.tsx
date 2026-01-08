@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Users, Clock, Trophy, Zap } from "lucide-react";
+import { Users, Clock, Trophy, Zap, Spade } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -9,7 +9,7 @@ interface LiveGame {
   prize: string;
   players: number;
   startsIn: number; // seconds
-  type: 'classic' | 'turbo' | 'jackpot';
+  type: 'classic' | 'turbo' | 'jackpot' | 'poker';
   cardPrice: string;
 }
 
@@ -17,7 +17,7 @@ const liveGames: LiveGame[] = [
   { id: 1, name: "Bingo Clássico", prize: "R$ 500", players: 89, startsIn: 120, type: 'classic', cardPrice: "R$ 2,00" },
   { id: 2, name: "Mega Jackpot", prize: "R$ 5.000", players: 234, startsIn: 45, type: 'jackpot', cardPrice: "R$ 10,00" },
   { id: 3, name: "Bingo Turbo", prize: "R$ 200", players: 56, startsIn: 300, type: 'turbo', cardPrice: "R$ 1,00" },
-  { id: 4, name: "Super Prêmio", prize: "R$ 1.500", players: 178, startsIn: 180, type: 'jackpot', cardPrice: "R$ 5,00" },
+  { id: 4, name: "Video Poker", prize: "Até 800x", players: 42, startsIn: 0, type: 'poker', cardPrice: "R$ 1,00" },
 ];
 
 const formatTime = (seconds: number) => {
@@ -40,22 +40,35 @@ const GameCard = ({ game }: { game: LiveGame }) => {
     classic: "from-bingo-blue/20 to-bingo-purple/20 border-bingo-blue/30",
     turbo: "from-bingo-pink/20 to-bingo-red/20 border-bingo-pink/30",
     jackpot: "from-bingo-gold/20 to-bingo-gold/10 border-bingo-gold/30",
+    poker: "from-green-500/20 to-green-700/20 border-green-500/30",
   };
 
   const typeLabels: Record<string, { label: string; color: string; icon?: React.ElementType }> = {
     classic: { label: "Clássico", color: "text-bingo-blue" },
     turbo: { label: "Turbo", color: "text-bingo-pink", icon: Zap },
     jackpot: { label: "Jackpot", color: "text-bingo-gold", icon: Trophy },
+    poker: { label: "Cartas", color: "text-green-500", icon: Spade },
   };
 
   const TypeIcon = typeLabels[game.type]?.icon;
+
+  const getGameLink = () => {
+    switch (game.type) {
+      case 'turbo': return '/jogo/turbo';
+      case 'jackpot': return '/jogo/jackpot';
+      case 'poker': return '/video-poker';
+      default: return '/jogo';
+    }
+  };
 
   return (
     <div className={`relative group rounded-2xl p-6 bg-gradient-to-br ${typeStyles[game.type]} border backdrop-blur-sm transition-all duration-300 hover:scale-[1.02] hover:shadow-card`}>
       {/* Live indicator */}
       <div className="absolute top-4 right-4 flex items-center gap-2">
         <span className="w-2 h-2 rounded-full bg-bingo-red animate-pulse" />
-        <span className="text-xs font-medium text-bingo-red uppercase">Ao Vivo</span>
+        <span className="text-xs font-medium text-bingo-red uppercase">
+          {game.type === 'poker' ? 'Jogar Agora' : 'Ao Vivo'}
+        </span>
       </div>
 
       {/* Game type badge */}
@@ -78,25 +91,29 @@ const GameCard = ({ game }: { game: LiveGame }) => {
       <div className="flex items-center gap-4 mb-6 text-sm text-muted-foreground">
         <div className="flex items-center gap-1">
           <Users className="w-4 h-4" />
-          <span>{game.players} jogadores</span>
+          <span>{game.players} {game.type === 'poker' ? 'online' : 'jogadores'}</span>
         </div>
-        <div className="flex items-center gap-1">
-          <Clock className="w-4 h-4" />
-          <span className={timeLeft < 60 ? "text-bingo-red font-semibold" : ""}>
-            {formatTime(timeLeft)}
-          </span>
-        </div>
+        {game.type !== 'poker' && (
+          <div className="flex items-center gap-1">
+            <Clock className="w-4 h-4" />
+            <span className={timeLeft < 60 ? "text-bingo-red font-semibold" : ""}>
+              {formatTime(timeLeft)}
+            </span>
+          </div>
+        )}
       </div>
 
       {/* Price and CTA */}
       <div className="flex items-center justify-between">
         <div>
-          <span className="text-xs text-muted-foreground">Cartela a partir de</span>
+          <span className="text-xs text-muted-foreground">
+            {game.type === 'poker' ? 'Aposta mínima' : 'Cartela a partir de'}
+          </span>
           <div className="font-semibold text-foreground">{game.cardPrice}</div>
         </div>
-        <Link to={game.type === 'turbo' ? '/jogo/turbo' : game.type === 'jackpot' ? '/jogo/jackpot' : '/jogo'}>
-          <Button variant={game.type === 'jackpot' ? 'hero' : 'default'} size="sm">
-            Entrar
+        <Link to={getGameLink()}>
+          <Button variant={game.type === 'jackpot' ? 'hero' : game.type === 'poker' ? 'default' : 'default'} size="sm">
+            {game.type === 'poker' ? 'Jogar' : 'Entrar'}
           </Button>
         </Link>
       </div>
