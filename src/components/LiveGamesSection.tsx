@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Users, Clock, Trophy, Zap } from "lucide-react";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 interface LiveGame {
   id: number;
@@ -93,9 +94,11 @@ const GameCard = ({ game }: { game: LiveGame }) => {
           <span className="text-xs text-muted-foreground">Cartela a partir de</span>
           <div className="font-semibold text-foreground">{game.cardPrice}</div>
         </div>
-        <Button variant={game.type === 'jackpot' ? 'hero' : 'default'} size="sm">
-          Entrar
-        </Button>
+        <Link to={game.type === 'turbo' ? '/jogo/turbo' : game.type === 'jackpot' ? '/jogo/jackpot' : '/jogo'}>
+          <Button variant={game.type === 'jackpot' ? 'hero' : 'default'} size="sm">
+            Entrar
+          </Button>
+        </Link>
       </div>
     </div>
   );

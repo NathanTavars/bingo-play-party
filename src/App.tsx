@@ -7,6 +7,8 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Auth from "./pages/Auth";
 import BingoGame from "./pages/BingoGame";
+import BingoTurbo from "./pages/BingoTurbo";
+import BingoJackpot from "./pages/BingoJackpot";
 import AdminLayout from "./pages/admin/AdminLayout";
 import Dashboard from "./pages/admin/Dashboard";
 import Clients from "./pages/admin/Clients";
@@ -29,6 +31,8 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/jogo" element={<BingoGame />} />
+          <Route path="/jogo/turbo" element={<BingoTurbo />} />
+          <Route path="/jogo/jackpot" element={<BingoJackpot />} />
           
           {/* Admin Routes */}
           <Route path="/admin" element={<AdminLayout />}>
