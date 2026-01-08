@@ -5,7 +5,8 @@ import {
   TrendingUp, 
   GamepadIcon,
   ArrowUpRight,
-  ArrowDownRight
+  ArrowDownRight,
+  Spade
 } from "lucide-react";
 
 const stats = [
@@ -26,7 +27,7 @@ const stats = [
     color: "text-bingo-green"
   },
   { 
-    title: "Rodadas Hoje", 
+    title: "Rodadas Bingo", 
     value: "234", 
     change: "+23%", 
     trend: "up",
@@ -34,12 +35,12 @@ const stats = [
     color: "text-bingo-purple"
   },
   { 
-    title: "Taxa de Conversão", 
-    value: "4.2%", 
-    change: "-2%", 
-    trend: "down",
-    icon: TrendingUp,
-    color: "text-primary"
+    title: "Rodadas Video Poker", 
+    value: "1.892", 
+    change: "+45%", 
+    trend: "up",
+    icon: Spade,
+    color: "text-amber-500"
   },
 ];
 
@@ -52,10 +53,17 @@ const recentTransactions = [
 ];
 
 const activeGames = [
-  { id: 1, name: "Bingo Clássico #1247", players: 89, prize: "R$ 500", status: "Em andamento" },
-  { id: 2, name: "Mega Jackpot #892", players: 234, prize: "R$ 5.000", status: "Aguardando" },
-  { id: 3, name: "Turbo Express #445", players: 56, prize: "R$ 200", status: "Em andamento" },
+  { id: 1, name: "Bingo Clássico #1247", type: "bingo", players: 89, prize: "R$ 500", status: "Em andamento" },
+  { id: 2, name: "Mega Jackpot #892", type: "bingo", players: 234, prize: "R$ 5.000", status: "Aguardando" },
+  { id: 3, name: "Turbo Express #445", type: "bingo", players: 56, prize: "R$ 200", status: "Em andamento" },
+  { id: 4, name: "Video Poker Mesa 1", type: "poker", players: 1, prize: "Variável", status: "Em andamento" },
+  { id: 5, name: "Video Poker Mesa 2", type: "poker", players: 1, prize: "Variável", status: "Em andamento" },
 ];
+
+const gameStats = {
+  bingo: { played: 234, wins: 89, revenue: 8540, payout: 4200 },
+  poker: { played: 1892, wins: 567, revenue: 12880, payout: 6340 },
+};
 
 const Dashboard = () => {
   return (
@@ -82,6 +90,71 @@ const Dashboard = () => {
             </div>
           </Card>
         ))}
+      </div>
+
+      {/* Game Stats by Type */}
+      <div className="grid md:grid-cols-2 gap-6">
+        <Card className="p-6">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="p-2 bg-bingo-purple/20 rounded-lg">
+              <GamepadIcon className="w-6 h-6 text-bingo-purple" />
+            </div>
+            <h2 className="text-xl font-display font-bold">Bingo</h2>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="p-3 bg-muted/50 rounded-lg">
+              <p className="text-sm text-muted-foreground">Rodadas Jogadas</p>
+              <p className="text-2xl font-bold">{gameStats.bingo.played}</p>
+            </div>
+            <div className="p-3 bg-muted/50 rounded-lg">
+              <p className="text-sm text-muted-foreground">Vitórias</p>
+              <p className="text-2xl font-bold text-bingo-green">{gameStats.bingo.wins}</p>
+            </div>
+            <div className="p-3 bg-muted/50 rounded-lg">
+              <p className="text-sm text-muted-foreground">Receita</p>
+              <p className="text-2xl font-bold text-primary">R$ {gameStats.bingo.revenue.toLocaleString('pt-BR')}</p>
+            </div>
+            <div className="p-3 bg-muted/50 rounded-lg">
+              <p className="text-sm text-muted-foreground">Pagamentos</p>
+              <p className="text-2xl font-bold text-bingo-red">R$ {gameStats.bingo.payout.toLocaleString('pt-BR')}</p>
+            </div>
+          </div>
+          <div className="mt-4 p-3 bg-primary/10 rounded-lg">
+            <p className="text-sm text-muted-foreground">Taxa de Vitória</p>
+            <p className="text-lg font-bold">{((gameStats.bingo.wins / gameStats.bingo.played) * 100).toFixed(1)}%</p>
+          </div>
+        </Card>
+
+        <Card className="p-6">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="p-2 bg-amber-500/20 rounded-lg">
+              <Spade className="w-6 h-6 text-amber-500" />
+            </div>
+            <h2 className="text-xl font-display font-bold">Video Poker</h2>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="p-3 bg-muted/50 rounded-lg">
+              <p className="text-sm text-muted-foreground">Rodadas Jogadas</p>
+              <p className="text-2xl font-bold">{gameStats.poker.played}</p>
+            </div>
+            <div className="p-3 bg-muted/50 rounded-lg">
+              <p className="text-sm text-muted-foreground">Vitórias</p>
+              <p className="text-2xl font-bold text-bingo-green">{gameStats.poker.wins}</p>
+            </div>
+            <div className="p-3 bg-muted/50 rounded-lg">
+              <p className="text-sm text-muted-foreground">Receita</p>
+              <p className="text-2xl font-bold text-primary">R$ {gameStats.poker.revenue.toLocaleString('pt-BR')}</p>
+            </div>
+            <div className="p-3 bg-muted/50 rounded-lg">
+              <p className="text-sm text-muted-foreground">Pagamentos</p>
+              <p className="text-2xl font-bold text-bingo-red">R$ {gameStats.poker.payout.toLocaleString('pt-BR')}</p>
+            </div>
+          </div>
+          <div className="mt-4 p-3 bg-amber-500/10 rounded-lg">
+            <p className="text-sm text-muted-foreground">Taxa de Vitória</p>
+            <p className="text-lg font-bold">{((gameStats.poker.wins / gameStats.poker.played) * 100).toFixed(1)}%</p>
+          </div>
+        </Card>
       </div>
 
       <div className="grid lg:grid-cols-2 gap-6">
@@ -116,9 +189,16 @@ const Dashboard = () => {
           <div className="space-y-3">
             {activeGames.map((game) => (
               <div key={game.id} className="flex items-center justify-between py-2 border-b border-border last:border-0">
-                <div>
-                  <p className="font-medium">{game.name}</p>
-                  <p className="text-sm text-muted-foreground">{game.players} jogadores</p>
+                <div className="flex items-center gap-2">
+                  {game.type === 'bingo' ? (
+                    <GamepadIcon className="w-4 h-4 text-bingo-purple" />
+                  ) : (
+                    <Spade className="w-4 h-4 text-amber-500" />
+                  )}
+                  <div>
+                    <p className="font-medium">{game.name}</p>
+                    <p className="text-sm text-muted-foreground">{game.players} jogador{game.players > 1 ? 'es' : ''}</p>
+                  </div>
                 </div>
                 <div className="text-right">
                   <p className="font-semibold text-primary">{game.prize}</p>

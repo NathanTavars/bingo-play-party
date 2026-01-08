@@ -9,6 +9,7 @@ import Auth from "./pages/Auth";
 import BingoGame from "./pages/BingoGame";
 import BingoTurbo from "./pages/BingoTurbo";
 import BingoJackpot from "./pages/BingoJackpot";
+import VideoPoker from "./pages/VideoPoker";
 import AdminLayout from "./pages/admin/AdminLayout";
 import Dashboard from "./pages/admin/Dashboard";
 import Clients from "./pages/admin/Clients";
@@ -33,6 +34,7 @@ const App = () => (
           <Route path="/jogo" element={<BingoGame />} />
           <Route path="/jogo/turbo" element={<BingoTurbo />} />
           <Route path="/jogo/jackpot" element={<BingoJackpot />} />
+          <Route path="/video-poker" element={<VideoPoker />} />
           
           {/* Admin Routes */}
           <Route path="/admin" element={<AdminLayout />}>
