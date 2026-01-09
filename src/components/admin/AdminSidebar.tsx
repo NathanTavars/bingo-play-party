@@ -34,6 +34,7 @@ const menuItems = [
   { title: "Usuários Admin", url: "/admin/usuarios", icon: UserCog },
   { title: "Gateways", url: "/admin/gateways", icon: CreditCard },
   { title: "Rodadas", url: "/admin/rodadas", icon: Gamepad2 },
+  { title: "Tabelas Video Poker", url: "/admin/tabelas-pagamento", icon: Gamepad2 },
   { title: "Configurações", url: "/admin/configuracoes", icon: Settings },
 ];
 
