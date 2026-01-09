@@ -2,8 +2,15 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, RotateCcw, Coins, Trophy, Sparkles } from "lucide-react";
+import { ArrowLeft, RotateCcw, Coins, Trophy, Sparkles, Settings2 } from "lucide-react";
 import { Link } from "react-router-dom";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const suits = ["♠", "♥", "♦", "♣"] as const;
 const ranks = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"] as const;
@@ -17,16 +24,65 @@ interface CardType {
   held?: boolean;
 }
 
-const payTable = [
-  { hand: "Royal Flush", payout: 800, description: "A-K-Q-J-10 do mesmo naipe" },
-  { hand: "Straight Flush", payout: 50, description: "5 cartas consecutivas do mesmo naipe" },
-  { hand: "Quadra", payout: 25, description: "4 cartas iguais" },
-  { hand: "Full House", payout: 9, description: "Trinca + Par" },
-  { hand: "Flush", payout: 6, description: "5 cartas do mesmo naipe" },
-  { hand: "Straight", payout: 4, description: "5 cartas consecutivas" },
-  { hand: "Trinca", payout: 3, description: "3 cartas iguais" },
-  { hand: "Dois Pares", payout: 2, description: "2 pares diferentes" },
-  { hand: "Jacks or Better", payout: 1, description: "Par de J, Q, K ou A" },
+interface PayTableEntry {
+  hand: string;
+  payout: number;
+  description: string;
+}
+
+interface PayTableOption {
+  id: string;
+  name: string;
+  entries: PayTableEntry[];
+}
+
+// Simulated pay tables that would come from admin settings
+const availablePayTables: PayTableOption[] = [
+  {
+    id: "1",
+    name: "Padrão - Jacks or Better",
+    entries: [
+      { hand: "Royal Flush", payout: 800, description: "A-K-Q-J-10 do mesmo naipe" },
+      { hand: "Straight Flush", payout: 50, description: "5 cartas consecutivas do mesmo naipe" },
+      { hand: "Quadra", payout: 25, description: "4 cartas iguais" },
+      { hand: "Full House", payout: 9, description: "Trinca + Par" },
+      { hand: "Flush", payout: 6, description: "5 cartas do mesmo naipe" },
+      { hand: "Straight", payout: 4, description: "5 cartas consecutivas" },
+      { hand: "Trinca", payout: 3, description: "3 cartas iguais" },
+      { hand: "Dois Pares", payout: 2, description: "2 pares diferentes" },
+      { hand: "Jacks or Better", payout: 1, description: "Par de J, Q, K ou A" },
+    ],
+  },
+  {
+    id: "2",
+    name: "Premium - Alto Risco",
+    entries: [
+      { hand: "Royal Flush", payout: 1200, description: "A-K-Q-J-10 do mesmo naipe" },
+      { hand: "Straight Flush", payout: 80, description: "5 cartas consecutivas do mesmo naipe" },
+      { hand: "Quadra", payout: 40, description: "4 cartas iguais" },
+      { hand: "Full House", payout: 12, description: "Trinca + Par" },
+      { hand: "Flush", payout: 8, description: "5 cartas do mesmo naipe" },
+      { hand: "Straight", payout: 5, description: "5 cartas consecutivas" },
+      { hand: "Trinca", payout: 3, description: "3 cartas iguais" },
+      { hand: "Dois Pares", payout: 2, description: "2 pares diferentes" },
+      { hand: "Jacks or Better", payout: 1, description: "Par de J, Q, K ou A" },
+    ],
+  },
+  {
+    id: "3",
+    name: "Mega Jackpot",
+    entries: [
+      { hand: "Royal Flush", payout: 2000, description: "A-K-Q-J-10 do mesmo naipe" },
+      { hand: "Straight Flush", payout: 100, description: "5 cartas consecutivas do mesmo naipe" },
+      { hand: "Quadra", payout: 50, description: "4 cartas iguais" },
+      { hand: "Full House", payout: 15, description: "Trinca + Par" },
+      { hand: "Flush", payout: 10, description: "5 cartas do mesmo naipe" },
+      { hand: "Straight", payout: 6, description: "5 cartas consecutivas" },
+      { hand: "Trinca", payout: 4, description: "3 cartas iguais" },
+      { hand: "Dois Pares", payout: 2, description: "2 pares diferentes" },
+      { hand: "Jacks or Better", payout: 1, description: "Par de J, Q, K ou A" },
+    ],
+  },
 ];
 
 const createDeck = (): CardType[] => {
@@ -56,42 +112,51 @@ const getRankValue = (rank: Rank): number => {
   return values[rank];
 };
 
-const evaluateHand = (hand: CardType[]): { name: string; payout: number } => {
-  const sortedHand = [...hand].sort((a, b) => getRankValue(b.rank) - getRankValue(a.rank));
-  const ranks = sortedHand.map((c) => c.rank);
-  const suits = sortedHand.map((c) => c.suit);
-  const values = sortedHand.map((c) => getRankValue(c.rank));
-
-  const isFlush = suits.every((s) => s === suits[0]);
-  const isStraight = values.every((v, i) => i === 0 || values[i - 1] - v === 1) ||
-    (values[0] === 14 && values[1] === 5 && values[2] === 4 && values[3] === 3 && values[4] === 2);
-  const isRoyal = isFlush && isStraight && values[0] === 14 && values[1] === 13;
-
-  const rankCounts: Record<string, number> = {};
-  ranks.forEach((r) => {
-    rankCounts[r] = (rankCounts[r] || 0) + 1;
-  });
-  const counts = Object.values(rankCounts).sort((a, b) => b - a);
-
-  if (isRoyal) return { name: "Royal Flush", payout: 800 };
-  if (isFlush && isStraight) return { name: "Straight Flush", payout: 50 };
-  if (counts[0] === 4) return { name: "Quadra", payout: 25 };
-  if (counts[0] === 3 && counts[1] === 2) return { name: "Full House", payout: 9 };
-  if (isFlush) return { name: "Flush", payout: 6 };
-  if (isStraight) return { name: "Straight", payout: 4 };
-  if (counts[0] === 3) return { name: "Trinca", payout: 3 };
-  if (counts[0] === 2 && counts[1] === 2) return { name: "Dois Pares", payout: 2 };
-  
-  // Jacks or Better - check for pair of J, Q, K, or A
-  const highPairs = Object.entries(rankCounts).filter(
-    ([rank, count]) => count === 2 && ["J", "Q", "K", "A"].includes(rank)
-  );
-  if (highPairs.length > 0) return { name: "Jacks or Better", payout: 1 };
-
-  return { name: "Sem Prêmio", payout: 0 };
-};
-
 const VideoPoker = () => {
+  const [selectedPayTableId, setSelectedPayTableId] = useState("1");
+  const selectedPayTable = availablePayTables.find(pt => pt.id === selectedPayTableId) || availablePayTables[0];
+  const payTable = selectedPayTable.entries;
+
+  const evaluateHand = (hand: CardType[]): { name: string; payout: number } => {
+    const sortedHand = [...hand].sort((a, b) => getRankValue(b.rank) - getRankValue(a.rank));
+    const handRanks = sortedHand.map((c) => c.rank);
+    const handSuits = sortedHand.map((c) => c.suit);
+    const values = sortedHand.map((c) => getRankValue(c.rank));
+
+    const isFlush = handSuits.every((s) => s === handSuits[0]);
+    const isStraight = values.every((v, i) => i === 0 || values[i - 1] - v === 1) ||
+      (values[0] === 14 && values[1] === 5 && values[2] === 4 && values[3] === 3 && values[4] === 2);
+    const isRoyal = isFlush && isStraight && values[0] === 14 && values[1] === 13;
+
+    const rankCounts: Record<string, number> = {};
+    handRanks.forEach((r) => {
+      rankCounts[r] = (rankCounts[r] || 0) + 1;
+    });
+    const counts = Object.values(rankCounts).sort((a, b) => b - a);
+
+    const getPayout = (handName: string) => {
+      const entry = payTable.find(e => e.hand === handName);
+      return entry?.payout || 0;
+    };
+
+    if (isRoyal) return { name: "Royal Flush", payout: getPayout("Royal Flush") };
+    if (isFlush && isStraight) return { name: "Straight Flush", payout: getPayout("Straight Flush") };
+    if (counts[0] === 4) return { name: "Quadra", payout: getPayout("Quadra") };
+    if (counts[0] === 3 && counts[1] === 2) return { name: "Full House", payout: getPayout("Full House") };
+    if (isFlush) return { name: "Flush", payout: getPayout("Flush") };
+    if (isStraight) return { name: "Straight", payout: getPayout("Straight") };
+    if (counts[0] === 3) return { name: "Trinca", payout: getPayout("Trinca") };
+    if (counts[0] === 2 && counts[1] === 2) return { name: "Dois Pares", payout: getPayout("Dois Pares") };
+    
+    // Jacks or Better - check for pair of J, Q, K, or A
+    const highPairs = Object.entries(rankCounts).filter(
+      ([rank, count]) => count === 2 && ["J", "Q", "K", "A"].includes(rank)
+    );
+    if (highPairs.length > 0) return { name: "Jacks or Better", payout: getPayout("Jacks or Better") };
+
+    return { name: "Sem Prêmio", payout: 0 };
+  };
+
   const [deck, setDeck] = useState<CardType[]>([]);
   const [hand, setHand] = useState<CardType[]>([]);
   const [deckIndex, setDeckIndex] = useState(5);
@@ -170,10 +235,26 @@ const VideoPoker = () => {
           <div className="flex items-center gap-2">
             <span className="font-display text-xl font-bold">Video Poker</span>
             <Badge variant="secondary" className="bg-amber-500/20 text-amber-400 border-amber-500/50">
-              Jacks or Better
+              {selectedPayTable.name}
             </Badge>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
+            {/* Pay Table Selector */}
+            {gamePhase === "betting" && (
+              <Select value={selectedPayTableId} onValueChange={setSelectedPayTableId}>
+                <SelectTrigger className="w-[180px] h-9">
+                  <Settings2 className="w-4 h-4 mr-2" />
+                  <SelectValue placeholder="Tabela" />
+                </SelectTrigger>
+                <SelectContent>
+                  {availablePayTables.map((pt) => (
+                    <SelectItem key={pt.id} value={pt.id}>
+                      {pt.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
             <div className="flex items-center gap-2 bg-primary/10 px-3 py-1.5 rounded-full">
               <Coins className="w-4 h-4 text-primary" />
               <span className="font-bold">{credits}</span>

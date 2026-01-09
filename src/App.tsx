@@ -19,6 +19,7 @@ import AdminUsers from "./pages/admin/AdminUsers";
 import Gateways from "./pages/admin/Gateways";
 import Settings from "./pages/admin/Settings";
 import Rounds from "./pages/admin/Rounds";
+import PayTables from "./pages/admin/PayTables";
 
 const queryClient = new QueryClient();
 
@@ -46,6 +47,7 @@ const App = () => (
             <Route path="gateways" element={<Gateways />} />
             <Route path="configuracoes" element={<Settings />} />
             <Route path="rodadas" element={<Rounds />} />
+            <Route path="tabelas-pagamento" element={<PayTables />} />
           </Route>
           
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
