@@ -20,7 +20,7 @@ import Gateways from "./pages/admin/Gateways";
 import Settings from "./pages/admin/Settings";
 import Rounds from "./pages/admin/Rounds";
 import PayTables from "./pages/admin/PayTables";
-
+import VideoPokerSettings from "./pages/admin/VideoPokerSettings";
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -48,6 +48,7 @@ const App = () => (
             <Route path="configuracoes" element={<Settings />} />
             <Route path="rodadas" element={<Rounds />} />
             <Route path="tabelas-pagamento" element={<PayTables />} />
+            <Route path="video-poker" element={<VideoPokerSettings />} />
           </Route>
           
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
