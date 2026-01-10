@@ -10,11 +10,22 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ThemeProvider } from "next-themes";
+import { useEffect, useState } from "react";
 import { ThemeToggle } from "@/components/admin/ThemeToggle";
 
 const AdminLayout = () => {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return null;
+  }
+
   return (
-    <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
+    <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} storageKey="admin-theme">
       <SidebarProvider>
         <div className="min-h-screen flex w-full bg-background">
           <AdminSidebar />
