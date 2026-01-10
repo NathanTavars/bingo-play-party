@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, RotateCcw, Coins, Trophy, Sparkles, Settings2 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { PlayingCard, PlaceholderCard } from "@/components/game/PlayingCard";
 import {
   Select,
   SelectContent,
@@ -219,9 +220,6 @@ const VideoPoker = () => {
     setGamePhase("result");
   };
 
-  const getCardColor = (suit: Suit) => {
-    return suit === "♥" || suit === "♦" ? "text-red-500" : "text-foreground";
-  };
 
   return (
     <div className="h-screen overflow-hidden bg-gradient-to-b from-green-900 via-green-800 to-green-900 flex flex-col">
@@ -290,36 +288,23 @@ const VideoPoker = () => {
 
         {/* Cards Area */}
         <div className="flex-1 flex items-center justify-center">
-          <div className="flex gap-2 md:gap-4">
+          <div className="flex gap-3 md:gap-5">
             {gamePhase === "betting" ? (
               // Placeholder cards
               Array.from({ length: 5 }).map((_, i) => (
-                <div
-                  key={i}
-                  className="w-16 h-24 md:w-24 md:h-36 lg:w-28 lg:h-40 bg-gradient-to-br from-primary/30 to-primary/10 rounded-xl border-2 border-dashed border-primary/30 flex items-center justify-center"
-                >
-                  <span className="text-2xl md:text-4xl text-primary/30">?</span>
-                </div>
+                <PlaceholderCard key={i} />
               ))
             ) : (
               hand.map((card, index) => (
-                <div
+                <PlayingCard
                   key={index}
+                  suit={card.suit}
+                  rank={card.rank}
+                  held={card.held}
                   onClick={() => toggleHold(index)}
-                  className={`relative w-16 h-24 md:w-24 md:h-36 lg:w-28 lg:h-40 bg-white rounded-xl shadow-lg cursor-pointer transition-all transform ${
-                    card.held ? "-translate-y-3 ring-2 ring-primary" : "hover:-translate-y-1"
-                  } ${winAnimation && result && result.payout > 0 ? "animate-pulse" : ""}`}
-                >
-                  <div className={`absolute inset-0 flex flex-col items-center justify-center ${getCardColor(card.suit)}`}>
-                    <span className="text-lg md:text-2xl lg:text-3xl font-bold">{card.rank}</span>
-                    <span className="text-2xl md:text-4xl lg:text-5xl">{card.suit}</span>
-                  </div>
-                  {card.held && (
-                    <div className="absolute -top-2 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground text-xs px-2 py-0.5 rounded-full font-bold">
-                      HOLD
-                    </div>
-                  )}
-                </div>
+                  disabled={gamePhase !== "holding"}
+                  animate={winAnimation && result && result.payout > 0}
+                />
               ))
             )}
           </div>
