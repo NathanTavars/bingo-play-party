@@ -24,12 +24,14 @@ import {
   LogOut,
   Home,
   Spade,
-  TableProperties
+  TableProperties,
+  Radio
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const menuItems = [
   { title: "Dashboard", url: "/admin", icon: LayoutDashboard },
+  { title: "Ao Vivo", url: "/admin/ao-vivo", icon: Radio },
   { title: "Clientes", url: "/admin/clientes", icon: Users },
   { title: "Relatórios", url: "/admin/relatorios", icon: FileText },
   { title: "Transações", url: "/admin/transacoes", icon: ArrowLeftRight },

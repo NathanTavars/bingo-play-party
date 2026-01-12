@@ -19,6 +19,7 @@ import AdminUsers from "./pages/admin/AdminUsers";
 import Gateways from "./pages/admin/Gateways";
 import Settings from "./pages/admin/Settings";
 import Rounds from "./pages/admin/Rounds";
+import LiveRounds from "./pages/admin/LiveRounds";
 import PayTables from "./pages/admin/PayTables";
 import VideoPokerSettings from "./pages/admin/VideoPokerSettings";
 const queryClient = new QueryClient();
@@ -40,6 +41,7 @@ const App = () => (
           {/* Admin Routes */}
           <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<Dashboard />} />
+            <Route path="ao-vivo" element={<LiveRounds />} />
             <Route path="clientes" element={<Clients />} />
             <Route path="relatorios" element={<Reports />} />
             <Route path="transacoes" element={<Transactions />} />
