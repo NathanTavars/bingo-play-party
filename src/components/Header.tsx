@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
-import { CircleDot, User, Wallet, Menu, X } from "lucide-react";
+import { User, Wallet, Menu, X } from "lucide-react";
+import logo from "@/assets/logo.png";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 
@@ -12,13 +13,7 @@ const Header = () => {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2">
-            <div className="relative">
-              <CircleDot className="w-8 h-8 text-primary animate-pulse-glow" />
-              <div className="absolute inset-0 bg-primary/20 blur-xl rounded-full" />
-            </div>
-            <span className="font-display text-2xl font-bold text-gradient-gold">
-              BingoMax
-            </span>
+            <img src={logo} alt="Bom Bingo" className="h-10" />
           </Link>
 
           {/* Navigation - Desktop */}
